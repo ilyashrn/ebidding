@@ -10,7 +10,17 @@ class Bids_model extends CI_Model {
 
 	public function get_per_auction($where)
 	{
-		$this->db->select('*');
+		$this->db->select('*,
+			(SELECT COUNT(*) FROM MEMBERS_REVIEWS
+	 		    	WHERE ID_RECEIVER = bids.ID_BIDDER
+	 		    	AND REVIEW_TYPE = 1)/
+	 		    (SELECT COUNT(*) FROM MEMBERS_REVIEWS
+	 		    	WHERE ID_RECEIVER = bids.ID_BIDDER) * 100 as nice_precentage,
+			 (SELECT COUNT(*) FROM MEMBERS_REVIEWS
+	 				WHERE ID_RECEIVER = bids.ID_BIDDER) as total_review,
+			 (SELECT COUNT(*) FROM MEMBERS_REVIEWS
+					WHERE ID_RECEIVER = bids.ID_BIDDER
+					AND REVIEW_TYPE = 1) as nice_review');
 		$this->db->from('bids');
 		$this->db->join('members', 'bids.id_bidder = members.id_member', 'left');
 		$this->db->where('id_auction', $where);
@@ -55,6 +65,18 @@ class Bids_model extends CI_Model {
 		$this->db->delete('bids');
 	}
 
+	public function delete_per_bidder($id_bidder)
+	{
+		$this->db->where('id_bidder', $id_bidder);
+		$this->db->delete('bids');
+	}
+
+	public function delete_per_auction($id_auction)
+	{
+		$this->db->where('id_auction', $id_auction);
+		$this->db->delete('bids');
+	}
+
 	public function get_per_bidder($where)
 	{
 		$this->db->select('*, 
@@ -70,7 +92,8 @@ class Bids_model extends CI_Model {
 		$this->db->join('members as ma', 'auctions.id_auctioneer = ma.id_member', 'left');
 		$this->db->join('products', 'auctions.id_product = products.id_product', 'left');
 		$this->db->join('products_subcategories', 'products.id_category = products_subcategories.id_subcategory', 'left');
-		$this->db->join('products_categories', 'products_subcategories.id_category = products_categories.id_category', 'left');
+		$this->db->join('categories_subcategories', 'products_subcategories.id_subcategory = categories_subcategories.id_subcategory', 'left');
+		$this->db->join('products_categories', 'categories_subcategories.id_category = products_categories.id_category', 'left');
 		$this->db->where('id_bidder', $where);
 
 		$query = $this->db->get();
@@ -106,7 +129,8 @@ class Bids_model extends CI_Model {
 		$this->db->join('members as ma', 'auctions.id_auctioneer = ma.id_member', 'left');
 		$this->db->join('products', 'auctions.id_product = products.id_product', 'left');
 		$this->db->join('products_subcategories', 'products.id_category = products_subcategories.id_subcategory', 'left');
-		$this->db->join('products_categories', 'products_subcategories.id_category = products_categories.id_category', 'left');
+		$this->db->join('categories_subcategories', 'products_subcategories.id_subcategory = categories_subcategories.id_subcategory', 'left');
+		$this->db->join('products_categories', 'categories_subcategories.id_category = products_categories.id_category', 'left');
 		$this->db->where('id_auctioneer', $where);
 
 		$query = $this->db->get();

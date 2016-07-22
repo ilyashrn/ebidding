@@ -27,8 +27,10 @@
                 <li <?php echo ($this->uri->segment(2) == 'incoming') ? 'class="current"' : '';?>><a href="<?php echo base_url().'bids/incoming/'.$mem_detail->id_member.'/'.$mem_detail->username; ?>">Bid masuk (<?php echo $bids_in ?>)</a></li>
                 <li <?php echo ($this->uri->segment(2) == 'sent') ? 'class="current"' : '';?>><a href="<?php echo base_url().'bids/sent/'.$mem_detail->id_member.'/'.$mem_detail->username; ?>">Bid keluar (<?php echo $bids_out ?>)</a></li>
                 <li class="<?php echo ($this->uri->segment(2) == 'reviews') ? 'current' : '';?>"><a href="<?php echo base_url().'members/reviews/'.$mem_detail->username; ?>">Review</a></li>
+                <?php if ($this->session->userdata('id')==$mem_detail->id_member): ?>
                 <li class="<?php echo ($this->uri->segment(2) == 'detail' || $this->uri->segment(2) == 'edit_profile') ? 'current' : '';?>"><a href="<?php echo base_url().'members/detail/'.$mem_detail->username; ?>">Informasi diri</a></li>
                 <li class="last <?php echo ($this->uri->segment(1) == 'notifications') ? 'current' : '';?>"><a href="<?php echo base_url().'notifications/'.$mem_detail->username ?>">Notifikasi</a></li>
+                <?php endif ?>
               </ul>
             </div>
           </div>

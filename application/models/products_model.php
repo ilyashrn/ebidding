@@ -26,6 +26,12 @@ class Products_model extends CI_Model {
 		return $query->name;
 	}
 
+	public function delete($id_product)
+	{
+		$this->db->where('id_product', $id_product);
+		$this->db->delete('products');
+	}
+
 }
 
 /* End of file products_model.php */

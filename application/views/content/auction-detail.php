@@ -11,8 +11,8 @@ $(document).ready(function() {
         <div class="col-xs-12">
           <ul>
             <li class="home"> <a href="<?php echo base_url().'auctions'?>">Auctions</a> <span>/</span> </li>
-            <li class="category1599"> <a href=""><?php echo $auction_detail->category_name; ?></a> <span>/ </span> </li>
-            <li class="category1600"> <a href="" title=""><?php echo $auction_detail->sub_name ?></a> </li>
+            <li class="category1599"> <a href="<?php echo base_url().'auctions/category/'.$auction_detail->category_name.'/all' ?>"><?php echo $auction_detail->category_name; ?></a> <span>/ </span> </li>
+            <li class="category1600"> <a href="<?php echo base_url().'auctions/category/'.$auction_detail->category_name.'/'.$auction_detail->sub_name ?>" title=""><?php echo $auction_detail->sub_name ?></a> </li>
           </ul>
         </div>
       </div>
@@ -29,11 +29,14 @@ $(document).ready(function() {
             <div class="product-view">
               <div class="product-essential">
                   <div class="product-img-box col-lg-4 col-sm-5 col-xs-12">
-                    <div class="product-image">
-                    <?php
-                    $img_thumbnail = $this->products_picts_model->get_product_thumbnail($auction_detail->id_product);
-                    ?>
-                      <div class="product-full"> <img id="product-zoom" src="<?php echo base_url().'assets/img/posts/'.$img_thumbnail->img_file;?>" data-zoom-image="<?php echo base_url().'assets/img/posts/'.$img_thumbnail->img_file;?>" alt="product-image"/> </div>
+                    <div class="product-image <?php echo ($auction_detail->is_clossed == 1) ? 'sold-out' : ''; ?>">
+                    <?php if ($product_picts): ?>
+                    <?php $img_thumbnail = $this->products_picts_model->get_product_thumbnail($auction_detail->id_product);?>
+                      <?php if ($img_thumbnail): ?>
+                        <div class="product-full"> <img id="product-zoom" src="<?php echo base_url().'assets/img/posts/'.$img_thumbnail->img_file;?>" data-zoom-image="<?php echo base_url().'assets/img/posts/'.$img_thumbnail->img_file;?>" alt="product-image"/> </div>
+                      <?php else: ?>
+                        <div class="product-full"> <img id="product-zoom" src="<?php echo base_url().'assets/img/noimage.png';?>" data-zoom-image="<?php echo base_url().'assets/img/noimage.png';?>" alt="product-image"/> </div>
+                      <?php endif ?>
                       <div class="more-views">
                         <div class="slider-items-products">
                           <div id="gallery_01" class="product-flexslider hidden-buttons product-img-thumb">
@@ -45,6 +48,7 @@ $(document).ready(function() {
                           </div>
                         </div>
                       </div>
+                    <?php endif ?>
                     </div>
                     <!-- end: more-images --> 
                   </div>
@@ -72,7 +76,7 @@ $(document).ready(function() {
                     </div>
                     <div class="short-description">
                       <h2>Deskripsi barang</h2>
-                      <p><?php echo $auction_detail->description; ?></p>
+                      <p><?php echo nl2br($auction_detail->description); ?></p>
                     </div>
                     <?php if ($auction_detail->id_auctioneer !== $this->session->userdata('id')): ?>
                       <?php if ($this->session->userdata('id')!== $auction_winner->id_bidder ): ?>
@@ -101,9 +105,18 @@ $(document).ready(function() {
                     <?php else: ?>
                     <div class="add-to-box">
                       <div class="add-to-cart">
+                        <?php if ($auction_detail->is_clossed == 0): ?>
                         <button data-toggle="modal" data-target="#myModal-3" class="button btn-cart" type="button">Tandai sudah laku / tutup auction</button>
-                        <?php if (!$this->reviews_model->check_entry($auction_detail->id_auction,$this->session->userdata('id'),$auction_winner->id_bidder)): ?>
+                        <?php if (
+                          !$this->reviews_model->check_entry(
+                              $auction_detail->id_auction,
+                              $this->session->userdata('id'),
+                              $auction_winner->id_bidder)
+                              && 
+                            $auction_detail->id_winner !== null
+                            ): ?>
                           <button data-toggle="modal" data-target="#myModal-4" class="button btn-cart" type="button">Review untuk pembeli</button>
+                        <?php endif ?>
                         <?php endif ?>
                       </div>
                     </div>
@@ -152,7 +165,7 @@ $(document).ready(function() {
                               <?php foreach ($bid_list as $bid): ?>
                                 <tr id="bid-<?php echo $bid->id_bid?>">
                                   <td <?php echo ($bid->id_bidder == $this->session->userdata('id')) ? 'style="background-color: #ffd740"' : '' ;?> colspan="1" style="">
-                                    <a href="<?php echo base_url().'members/detail/' ?>"><?php echo $bid->username; ?></a>
+                                    <a href="<?php echo base_url().'members/detail/'.$bid->username ?>"><?php echo $bid->username; ?></a>
                                     </td>
                                   <td colspan="1" style="">
                                     <strong><span class="price">Rp <?php echo number_format($bid->bid_value) ;?></span></strong>
@@ -165,7 +178,7 @@ $(document).ready(function() {
                                     <?php if ($this->session->userdata('id') == $auction_detail->id_auctioneer): ?>
                                       <strong><a role="button" data-toggle="collapse" href="#collapse-detail-<?php echo $bid->id_bid;?>">See detail</a></strong>
                                     <?php endif ?>
-                                    <?php if ($this->session->userdata('id') == $bid->id_bidder): ?>
+                                    <?php if ($this->session->userdata('id') == $bid->id_bidder && $bid->id_bid!== $auction_detail->id_winner): ?>
                                       <?php 
                                         $batalkan = 'batalkan-'.$bid->id_bid;
                                       $attributes = array('id' => $batalkan); echo form_open('auctions/unset_bid',$attributes); ?>
@@ -187,18 +200,24 @@ $(document).ready(function() {
                                         <div class="col-md-6">
                                           <span>Bidder : <strong><a href=""><?php echo $bid->fullname; ?> (<?php echo $bid->username; ?>)</a></strong></span><br>
                                           <span>Location : <?php echo ($bid->city) ? $bid->city.', '.$bid->province : '-';?></span><br>
-                                          <span>Bid : Rp <?php echo number_format($bid->bid_value) ?></span><br>
-                                          <span>Timestamp : <?php echo $bid->bid_timestamp; ?></span><br>
+                                          <span>Bid Value : Rp <?php echo number_format($bid->bid_value) ?></span><br>
+                                          <span>Bid Timestamp : <?php echo $bid->bid_timestamp; ?></span><br>
                                         </div>
                                         <div class="col-md-6">
-                                          <span>Review positif : 5 (50%)</span><br>
-                                          <span>Review negatif : 4 (40%)</span>
+                                          <span style="color: green;">Review positif : <?php echo number_format($bid->nice_precentage) ?>%</span>
+                                          <span>(<?php echo $bid->nice_review.' dari '.$bid->total_review ?> total review)</span>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
                                 </tr>
                               <?php endforeach ?>
+                            <?php else: ?>
+                              <div class="col-md-6">
+                                <div class="alert alert-warning">
+                                  There's no bid right now.
+                                </div>
+                              </div>
                             <?php endif ?>
                           </tbody>
                         </table>
@@ -208,7 +227,9 @@ $(document).ready(function() {
                           <?php if ($auction_detail->id_winner): ?>
                             <button data-toggle="collapse" data-target="#collapse-reset" class="button btn-proceed-checkout" title="Proceed to Checkout" type="button"><span>Reset winner</span></button>
                           <?php else: ?>
+                            <?php if ($auction_detail->bids_count > 0): ?> 
                             <button data-toggle="collapse" data-target="#collapse-winner" class="button btn-proceed-checkout" title="Proceed to Checkout" type="button"><span>Set a winner</span></button>
+                            <?php endif ?> 
                           <?php endif ?>
                           </li>
                         </ul>
@@ -230,18 +251,15 @@ $(document).ready(function() {
                                   <input type="hidden" name="current_uri" value="<?php echo $this->uri->uri_string() ?>"></input>
                                   <select name="winner" style="width: 50%">
                                       <option>Pilih bidder pemenang</option>
+                                    <?php if ($bid_list): ?>
                                     <?php foreach ($bid_list as $bid): ?>
                                       <option value="<?php echo $bid->id_bid ?>">Rp <?php echo number_format($bid->bid_value).' - '.$bid->username.' ('.$bid->fullname.')' ?></option>
                                     <?php endforeach ?>
+                                    <?php endif ?>
                                   </select>
                                   <button class="button coupon" type="submit"><span>Assign as new winner</span></button>
-                                <!-- <?php echo form_close(); ?> -->
-                                <!-- <?php echo form_open(); ?> -->
                                   <a href="<?php echo base_url().'auctions/reset_winner/'.$auction_detail->id_auction.'/'.$auction_detail->id_product.'/'.$auction_detail->id_auctioneer ?>" class="button coupon" style="background-color: #d14233;border-color: #d14233;text-transform: uppercase;font-size: 11px;font-weight: bold;"><span>reset current winner</span></a>
                                 <?php echo form_close(); ?>
-                                  <!-- <input type="hidden" name="id_auction" value="<?php echo $auction_detail->id_auction ?>"></input>
-                                  <input type="hidden" name="current_uri" value="<?php echo $this->uri->uri_string() ?>"></input>
-                                  <input type="hidden" name="current_winner" value="<?php echo $auction_detail->id_winner ?>"></input> -->
                               </div>
                             </div>
                           </div>

@@ -8,11 +8,11 @@
             <h1>Ubah profil</h1>
           </div>
           <ol class="one-page-checkout" id="checkoutSteps">
-            <li id="opc-billing" class="section allow active">
+            <li id="informasi-dasar" class="section allow active">
               <div class="step-title"> <span class="number">1</span>
                 <h3>Informasi dasar</h3>
               </div>
-              <div id="checkout-step-billing" class="step a-item" style="">
+              <div id="informasi-dasar" class="step a-item" style="">
                 <?php if ($this->session->flashdata('warn')) { ?>
                   <div class="alert alert-danger"><?php echo $this->session->flashdata('warn'); ?></div>
                 <?php } ?>
@@ -44,7 +44,7 @@
                       <li style="margin-bottom: 10px;">
                         <label>Avatar</label>
                         <div style="width: 100px;float: left;">
-                          <img style="width: auto;height: auto;max-width: 80%;vertical-align: middle;" src="<?php echo ($mem_detail->avatar!=='') ? base_url().'assets/img/avatar/image3.JPG' : base_url().'assets/img/avatar/default_avatar.png';?>">
+                          <img style="width: auto;height: auto;max-width: 80%;vertical-align: middle;" src="<?php echo ($mem_detail->avatar!=='') ? base_url().'assets/img/avatar/'.$mem_detail->avatar : base_url().'assets/img/avatar/default_avatar.png';?>">
                           <input type="hidden" value="<?php echo $mem_detail->avatar ?>" name="cur_avatar"></input>
                         </div>
                         <div class="input-box">
@@ -54,11 +54,11 @@
                     </ul>
               </div>
             </li>
-            <li id="opc-shipping" class="section">
+            <li id="alamat-kontak" class="section">
               <div class="step-title"> <span class="number">2</span>
                 <h3 class="one_page_heading"> Alamat dan Kontak</h3>
               </div>
-              <div id="checkout-step-shipping" class="step a-item">
+              <div id="alamat-kontak" class="step a-item">
                 <div id="shipping-zip-form">
                   <ul class="form-list" style="width: 70%;">
                       <li style="margin-bottom: 10px;">
@@ -99,8 +99,79 @@
                   </div>
               </div>
             </li>
+            <li id="password" class="section">
+              <div class="step-title"> <span class="number">3</span>
+                <h3 class="one_page_heading">Password</h3>
+              </div>
+              <div id="password" class="step a-item">
+                <div class="alert alert-warning col-md-6">
+                  Isikan hanya jika kamu ingin mengganti password.
+                </div>
+                <div id="shipping-zip-form">
+                  <ul class="form-list" style="width: 70%;">
+                      <li>
+                        <div class="col-md-6" style="margin-bottom: 10px;padding-left: 0px;">
+                          <label>Old Password</label>
+                          <div class="input-box">
+                            <input value="" name="old_pass" class="input-text validate-postcode" type="password">
+                            <input type="hidden" value="<?php echo $mem_detail->password ?>" name="old_pass_conf">
+                          </div>
+                        </div>
+                      </li>
+                      <li style="margin-bottom: 10px;">
+                        <div class="col-md-6" style="padding-left: 0px;">
+                          <label>New password</label>
+                          <div class="input-box">
+                            <input value="" name="new_pass" class="input-text validate-postcode" type="password">
+                          </div>
+                        </div>
+                        <div class="col-md-6" style="padding-left: 0px;">
+                          <label>Confirm password</label>
+                          <div class="input-box">
+                            <input value="" name="new_pass_conf" class="input-text validate-postcode" type="password">
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+              </div>
+            </li>
             <button type="submit" name="sub_edit" class="button coupon pull-right"><span>Simpan perubahan</span></button>
-            </form>
+            <?php echo form_close(); ?>
+
+            <li id="password" class="section">
+              <?php echo form_open('members/remove_account'); ?>
+              <div class="step-title"> <span class="number">3</span>
+                <h3 class="one_page_heading">Hapus akun</h3>
+              </div>
+              <div id="password" class="step a-item">
+                <div class="alert alert-danger col-md-6">
+                  Ketikkan username dan passwordmu untuk <b>menghapus akun ini.</b>
+                </div>
+                <div id="shipping-zip-form">
+                  <ul class="form-list" style="width: 70%;">
+                      <li style="margin-bottom: 10px;">
+                        <div class="col-md-6" style="padding-left: 0px;">
+                          <label>Username</label>
+                          <div class="input-box">
+                            <input value="" name="username" class="input-text validate-postcode" type="text">
+                            <input type="hidden" name="id_member" value="<?php echo $mem_detail->id_member ?>">
+                          </div>
+                        </div>
+                        <div class="col-md-6" style="padding-left: 0px;">
+                          <label>password</label>
+                          <div class="input-box">
+                            <input value="" name="password" class="input-text validate-postcode" type="password">
+                            <input type="hidden" name="current_uri" value="<?php echo $this->uri->uri_string(); ?>">
+                          </div>
+                        </div>
+                      </li>
+                      <button style="margin-top:10px;" type="submit" name="sub_edit" class="button coupon pull-right"><span>Hapus akun</span></button>
+                    </ul>
+                  </div>
+              </div>
+              <?php echo form_close(); ?>
+            </li>
           </ol>
         </div>
       </section>

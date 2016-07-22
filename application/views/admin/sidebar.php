@@ -20,8 +20,8 @@
                             <div class="sidebar-toggler"> </div>
                             <!-- END SIDEBAR TOGGLER BUTTON -->
                         </li>
-                        <li class="nav-item start <?php echo ($this->uri->segment(2) == '' || $this->uri->segment(2) == 'dashboard') ? 'active': '';?>">
-                            <a href="" class="nav-link nav-toggle">
+                        <li class="nav-item start <?php echo ($this->uri->segment(2) == '' || $this->uri->segment(2) == 'main') ? 'active': '';?>">
+                            <a href="<?php echo base_url().'admin/' ?>" class="nav-link nav-toggle">
                                 <i class="icon-home"></i>
                                 <span class="title">Dashboard</span>
                             </a>
@@ -29,42 +29,42 @@
                         <li class="heading">
                             <h3 class="uppercase">Users manager</h3>
                         </li>
-                        <li class="nav-item  <?php echo ($this->uri->segment(2) == 'administrator') ? 'active' : ''; ?>">
+                        <li class="nav-item  <?php echo ($this->uri->segment(2) == 'administrators') ? 'active' : ''; ?>">
                             <a href="javascript:;" class="nav-link nav-toggle">
                                 <i class="icon-users"></i>
                                 <span class="title">Administrators</span>
                                 <span class="arrow"></span>
                             </a>
                             <ul class="sub-menu">
-                                <li class="nav-item  ">
-                                    <a href="ui_colors.html" class="nav-link ">
-                                        <span class="title">Add new</span>
+                                <li class="nav-item <?php echo ($this->uri->segment(2) == 'administrators' && $this->uri->segment(3) == '') ? 'active open' : '' ?>">
+                                    <a href="<?php echo base_url().'admin/administrators/' ?>" class="nav-link ">
+                                        <span class="title">Administrators list</span>
+                                        
                                     </a>
                                 </li>
-                                <li class="nav-item  ">
-                                    <a href="ui_general.html" class="nav-link ">
-                                        <span class="title">Administrator list</span>
-                                        <span class="badge badge-success">6</span>
+                                <li class="nav-item <?php echo ($this->uri->segment(2) == 'administrators' && $this->uri->segment(3) == 'add_new') ? 'active open' : '' ?> ">
+                                    <a href="<?php echo base_url().'admin/administrators/add_new' ?>" class="nav-link ">
+                                        <span class="title">Add new</span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item  ">
+                        <li class="nav-item <?php echo ($this->uri->segment(2) == 'members') ? 'active' : '' ?> ">
                             <a href="javascript:;" class="nav-link nav-toggle">
                                 <i class="icon-user"></i>
                                 <span class="title">Members</span>
                                 <span class="arrow"></span>
                             </a>
                             <ul class="sub-menu">
-                                <li class="nav-item  ">
-                                    <a href="ui_colors.html" class="nav-link ">
-                                        <span class="title">Add new</span>
+                                <li class="nav-item  <?php echo ($this->uri->segment(2) == 'members' && $this->uri->segment(3) == '') ? 'active open' : '' ?>">
+                                    <a href="<?php echo base_url().'admin/members' ?>" class="nav-link ">
+                                        <span class="title">Members list</span>
+                                        
                                     </a>
                                 </li>
-                                <li class="nav-item  ">
-                                    <a href="ui_general.html" class="nav-link ">
-                                        <span class="title">Member list</span>
-                                        <span class="badge badge-success">6</span>
+                                <li class="nav-item  <?php echo ($this->uri->segment(2) == 'members' && $this->uri->segment(3) == 'add_new') ? 'active open' : '' ?>">
+                                    <a href="<?php echo base_url().'admin/members/add_new' ?>" class="nav-link ">
+                                        <span class="title">Add new</span>
                                     </a>
                                 </li>
                             </ul>
@@ -72,28 +72,22 @@
                         <li class="heading">
                             <h3 class="uppercase">Posts manager</h3>
                         </li>
-                        <li class="nav-item  ">
+                        <li class="nav-item  <?php echo ($this->uri->segment(2) == 'auctions') ? 'active open': '' ?>">
                             <a href="javascript:;" class="nav-link nav-toggle">
                                 <i class="icon-grid"></i>
                                 <span class="title">Auction</span>
                                 <span class="arrow"></span>
                             </a>
                             <ul class="sub-menu">
-                                <li class="nav-item  ">
-                                    <a href="components_date_time_pickers.html" class="nav-link ">
+                                <li class="nav-item <?php echo ($this->uri->segment(2) == 'auctions') ? 'active open': '' ?> ">
+                                    <a href="<?php echo base_url().'admin/auctions/' ?>" class="nav-link ">
                                         <span class="title">Auction list</span>
-                                        <span class="badge badge-success">6</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item  ">
-                                    <a href="components_color_pickers.html" class="nav-link ">
-                                        <span class="title">Auction list</span>
-                                        <span class="badge badge-success">6</span>
+                                        
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item  ">
+                        <li class="nav-item  <?php echo ($this->uri->segment(2) == 'categories') ? 'active open': '' ?>">
                             <a href="javascript:;" class="nav-link nav-toggle">
                                 <i class="icon-tag"></i>
                                 <span class="title">Categories</span>
@@ -101,15 +95,9 @@
                             </a>
                             <ul class="sub-menu">
                                 <li class="nav-item  ">
-                                    <a href="components_date_time_pickers.html" class="nav-link ">
-                                        <span class="title">Post list</span>
-                                        <span class="badge badge-success">6</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item  ">
-                                    <a href="components_color_pickers.html" class="nav-link ">
-                                        <span class="title">Auction list</span>
-                                        <span class="badge badge-success">6</span>
+                                    <a href="<?php echo base_url().'admin/categories/' ?>" class="nav-link ">
+                                        <span class="title">Category manager</span>
+                                        
                                     </a>
                                 </li>
                             </ul>

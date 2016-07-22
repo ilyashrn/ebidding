@@ -21,7 +21,7 @@
                   </div>
                 <?php endforeach ?>
               <?php else: ?>
-                <div class="alert alert-warning">Tidak ada review untuk user ini.</div>
+                <div class="alert alert-warning">Tidak ada review untuk member ini.</div>
               <?php endif ?>
             </div>  
           </div>

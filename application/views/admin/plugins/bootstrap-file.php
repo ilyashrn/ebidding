@@ -1,0 +1,2 @@
+<script type="text/javascript" src="<?php echo base_url().'assets/aspire/'?>js/bootstrap_file_input/plugins/canvas-to-blob.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url().'assets/aspire/'?>js/bootstrap_file_input/fileinput.min.js"></script>

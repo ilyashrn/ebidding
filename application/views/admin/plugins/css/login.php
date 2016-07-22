@@ -1,0 +1,1 @@
+<link href="<?php echo base_url() ?>assets/pages/css/login-2.min.css" rel="stylesheet" type="text/css" />

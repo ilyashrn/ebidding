@@ -15,6 +15,8 @@ class Members extends CI_Controller {
 	{
 		$this->form_validation->set_rules('username', 'Username', 'required|callback_is_username_exist');
 		$this->form_validation->set_rules('email', 'E-mail', 'required|callback_is_email_exist');
+		$this->form_validation->set_rules('conf_password', 'password confirmation', 'required');
+		$this->form_validation->set_rules('password', 'password', 'matches[conf_password]');
 		
 		if ($this->form_validation->run()) {
 			$input = array(
@@ -59,6 +61,10 @@ class Members extends CI_Controller {
 	public function detail($username)
 	{
 		$mem_detail = $this->members_model->get('username',$username);
+		if ($this->session->userdata('id')!==$mem_detail->id_member ) {
+			redirect('auctions/active/'.$mem_detail->id_member.'/'.$mem_detail->username,'refresh');
+		}
+		
 		$data = array(
 			'title' => $mem_detail->fullname.' | ',
 			'mem_detail' => $mem_detail,
@@ -112,8 +118,6 @@ class Members extends CI_Controller {
 			$upload_data = $this->upload->data(); //UPLOAD DATA AFTER UPLOADING
 			$file_name = $upload_data['file_name']; //RETRIEVING FILE NAME
 		}	
-		print_r($this->input->post());
-		print_r($file_name);
 
 		$update = array(
 			'fullname' => $this->input->post('fullname'),
@@ -149,6 +153,24 @@ class Members extends CI_Controller {
 				$this->members_model->update($new_email, $this->input->post('current_id'));
 			}
 		}
+
+		if ($this->input->post('old_pass')) {
+			if (md5($this->input->post('old_pass')) == $this->input->post('old_pass_conf')) {
+				$this->form_validation->set_rules('new_pass_conf', 'mew password confirmation', 'required');
+				$this->form_validation->set_rules('new_pass', 'new password', 'required|matches[new_pass_conf]');
+				if ($this->form_validation->run()) {
+					$new_pass = array('password' => md5($this->input->post('new_pass')));
+					$this->members_model->update($new_pass,$this->input->post('current_id'));
+				} else {
+					$this->session->set_flashdata('warn', validation_errors());
+					redirect('members/edit_profile/'.$this->input->post('current_id').'/'.$this->input->post('current_username'),'refresh');
+				}
+			} else {
+				$this->session->set_flashdata('warn', 'The old password is not correct. Please try again.');
+				redirect('members/edit_profile/'.$this->input->post('current_id').'/'.$this->input->post('current_username'),'refresh');
+			}
+		}
+
 		$this->session->set_flashdata('msg', 'Profil berhasil diperbarui.');
 		redirect('members/detail/'.$this->input->post('current_username'),'refresh');
 	}
@@ -205,6 +227,24 @@ class Members extends CI_Controller {
 			'id_receiver' => $id_receiver,
 			'is_read' => false);		
 		$this->notifications_model->insert($input); 
+	}
+
+	public function remove_account()
+	{
+		
+		if ($this->members_model->login($this->input->post('username'),md5($this->input->post('password')))) {
+			$this->members_model->delete($this->input->post('id_member'));
+			$auctions = $this->auctions_model->get_per_auctioneer($this->input->post('id_member'));
+			if ($auctions) {
+				foreach ($auctions as $auc) {
+					$this->products_model->delete($auc->id_product);
+				}
+			}	
+		} else {
+			$this->session->set_flashdata('warn', 'Username atau password yang kamu masukkan salah.');
+			redirect($this->input->post('current_uri'),'refresh');
+		}
+		redirect('main/logout','refresh');
 	}
 	
 }

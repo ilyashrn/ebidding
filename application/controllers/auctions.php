@@ -38,6 +38,9 @@ class Auctions extends CI_Controller {
 
 	public function category($name,$sub)
 	{
+		$arr = array(
+			'keyword' => '', 'price_from' => '', 'price_to' => '', 'Baru' => '', 'Bekas' => '', 'closed' => '', 'not_closed' => '' );
+		$this->session->unset_userdata($arr);
 		$this->pagination_setup(
 			base_url().'auctions/category/'.$name.'/'.$sub,
 			$this->auctions_model->get_per_category_rows(
@@ -68,20 +71,62 @@ class Auctions extends CI_Controller {
 
 	public function search()
 	{
-		$this->pagination_setup(
-			base_url().'auctions/search',
-			$this->auctions_model->search_result_rows($this->input->post('search'))
-			);
-		$pagination_link = $this->pagination->create_links();
+		if (!$this->input->post()) {
+			redirect('main','refresh');
+		}
+		
+		$keyword = ($this->input->post('search')) ? $this->input->post('search') : "NIL";
+
+		$array = array(
+			'keyword' => $this->input->post('search'),
+			'price_from' => $this->input->post('price_from'),
+			'price_to' => $this->input->post('price_to'),
+			'Baru' => $this->input->post('Baru'),
+			'Bekas' => $this->input->post('Bekas'),
+			'closed' => $this->input->post('closed'),
+			'not_closed' => $this->input->post('not_closed'),
+			'refine' => true
+		);
+		
+		$this->session->set_userdata($array);
 		$current_page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 
-		$keyword = ($this->input->post('search')) ? $this->input->post('search') : "NIL";
+		$this->pagination_setup(
+			base_url().'auctions/search',
+			$this->auctions_model->search_result_rows(
+				$keyword,
+				$this->input->post('price_from'),
+				$this->input->post('price_to'),
+				$this->input->post('Baru'),
+				$this->input->post('Bekas'),
+				$this->input->post('closed'),
+				$this->input->post('not_closed'))
+			);
+		$products = $this->auctions_model->refine_search(
+						$keyword,
+						15,
+						$current_page,
+						$this->input->post('price_from'),
+						$this->input->post('price_to'),
+						$this->input->post('Baru'),
+						$this->input->post('Bekas'),
+						$this->input->post('closed'),
+						$this->input->post('not_closed'));
+
+		if ($keyword=="NIL") {
+			$subtitle = 'Hasil filter';
+		} else {
+			$subtitle = 'Hasil pencarian kata kunci "'.$keyword.'"';
+		}
+
+		$pagination_link = $this->pagination->create_links();
+
 		$data = array(
 			'title' => 'Hasil Pencarian | ',
-			'subtitle' => 'Hasil pencarian kata kunci "'.$this->input->post('search').'"',
+			'subtitle' => $subtitle,
 			'product_categories' => $this->categories_model->get_all_categories(),
 			'header_categories' => $this->header_categories,
-			'products' => $this->auctions_model->search($keyword,15,$current_page),
+			'products' => $products,
 			'pagination_link' => $pagination_link
 		);
 
@@ -95,7 +140,8 @@ class Auctions extends CI_Controller {
 	public function start_new()
 	{
 		if ($this->session->userdata('username') == false) {
-			redirect('main','refresh');
+			$this->session->set_flashdata('warn', 'Kamu harus login terlebih dahulu untuk mulai berjualan.');
+			redirect('main/login','refresh');
 		}
 
 		$data = array(
@@ -117,7 +163,7 @@ class Auctions extends CI_Controller {
 		$input_product = array(
 			'name' => $this->input->post('name'),
 			'condition' => $this->input->post('condition'), 
-			'description' => nl2br($this->input->post('description')),
+			'description' => $this->input->post('description'),
 			'id_category' => $this->input->post('sub_category')
 		);
 		$ins_product = $this->products_model->insert($input_product);
@@ -128,12 +174,14 @@ class Auctions extends CI_Controller {
 			'start_price' => $this->input->post('start_price'),
 			'lower_limit' => $this->input->post('lower_limit'),
 			'bid_interval' => $this->input->post('bid_interval'),
-			'start_timestamp' => $now
+			'start_timestamp' => $now,
+			'last_updated' => $now
 		); 
 		$ins_auction = $this->auctions_model->insert($input_auction);
 		$upl_picts = $this->upload_picts_process($ins_product);
 
-        $this->session->set_flashdata('success', $ins_auction);
+        $this->session->set_flashdata('id_auct', $ins_auction);
+        $this->session->set_flashdata('id_prod', $ins_product);
     	redirect('auctions/start_successfull','refresh');
 	}
 
@@ -195,7 +243,7 @@ class Auctions extends CI_Controller {
 
 	public function start_successfull()
 	{
-		if ($this->session->flashdata('success')) {
+		if ($this->session->flashdata('id_auct')) {
 			$data = array('title' => 'Create auction successfull | ', 'header_categories' => $this->header_categories);
 			
 			$this->load->view('html_head', $data);
@@ -214,7 +262,7 @@ class Auctions extends CI_Controller {
 		}
 
 		$data = array(
-			'title' => 'Edit iklan | ',
+			'title' => 'Edit lapak | ',
 			'product_categories' => $this->categories_model->get_all_categories(),
 			'auction_detail' => $this->auctions_model->get($id_auction),
 			'product_picts' => $this->products_picts_model->get_per_product($id_product),
@@ -234,7 +282,7 @@ class Auctions extends CI_Controller {
 		$upd_product = array(
 			'name' => $this->input->post('name'),
 			'condition' => $this->input->post('condition'), 
-			'description' => nl2br($this->input->post('description')),
+			'description' => $this->input->post('description'),
 			'id_category' => $this->input->post('sub_category')
 		);	
 
@@ -244,11 +292,12 @@ class Auctions extends CI_Controller {
 			'start_price' => $this->input->post('start_price'),
 			'lower_limit' => $this->input->post('lower_limit'),
 			'bid_interval' => $this->input->post('bid_interval'),
-			'start_timestamp' => $now
+			'last_updated' => $now
 		); 
 		$this->products_model->update($upd_product,$this->input->post('id_product'));
 		$this->auctions_model->update($upd_auction,$this->input->post('id_auction'));
 		$this->upload_picts_process($this->input->post('id_product'));
+		$this->session->set_flashdata('msg', 'Lapak berhasil diperbarui.');
 		redirect('auctions/active/'.$this->session->userdata('id').'/'.$this->session->userdata('username'),'refresh');
 	}
 
@@ -349,6 +398,11 @@ class Auctions extends CI_Controller {
 
 	public function set_bid()
 	{
+		if (!$this->session->userdata('id')) {
+			$this->session->set_flashdata('warn', 'Please login to start bidding.');	
+			redirect('main/login','refresh');
+		}
+
 		$this->form_validation->set_rules('bid', 'Bid', 'required|callback_is_bid_valid');
 		if ($this->form_validation->run()) {
 			$input = array(

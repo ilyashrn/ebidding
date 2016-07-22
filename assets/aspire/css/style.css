@@ -14464,3 +14464,12 @@ button.button.button-clear {
 	margin-left: auto;
 	margin-right: auto;
 }
+
+.sold-out {
+	-webkit-filter: grayscale(100%);
+	filter: grayscale(100%);
+}
+
+.filter-form input {
+	margin-bottom: 10px;
+}

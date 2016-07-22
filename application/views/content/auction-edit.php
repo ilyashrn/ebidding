@@ -23,7 +23,7 @@
         <section class="col-sm-9 wow bounceInUp animated">
         <div class="col-main">
           <div class="page-title">
-            <h1>Edit iklan</h1>
+            <h1>Edit lapak</h1>
           </div>
           <ol class="one-page-checkout" id="checkoutSteps">
             <li id="opc-billing" class="section allow active">
@@ -66,7 +66,7 @@
                       <li style="margin-bottom: 10px;">
                         <label>Nama barang</label>
                         <div class="input-box">
-                          <input placeholder="Nama produk atau barang untuk iklan" value="<?php echo $auction_detail->name; ?>" name="name" class="input-text validate-postcode" type="text" required>
+                          <input placeholder="Nama produk atau barang untuk lapak" value="<?php echo $auction_detail->name; ?>" name="name" class="input-text validate-postcode" type="text" required>
                         </div>
                       </li>
                       <li style="margin-bottom: 10px;">
@@ -83,12 +83,14 @@
                         <label>Foto barang</label>
                         <div class="input-box">
                           <div class="post-picts">
+                            <?php if ($product_picts): ?>
                             <?php foreach ($product_picts as $pict) { ?>
                               <div class="col-sm-4 post-pict">
                                 <img style="width: 100%" src="<?php echo base_url().'assets/img/posts/'.$pict->img_file; ?>">
                                 <a class="remove-a" href="<?php echo base_url().'auctions/remove_img/'.$pict->img_file.'/'.$pict->id_pict; ?>"><i class="fa fa-remove"></i> Remove photo</a>
                               </div>
                             <?php } ?>
+                            <?php endif ?>
                           </div>
                           <div class="form-group">
                             <input name="images[]" id="input-id" multiple type="file" class="file-loading">
@@ -98,7 +100,7 @@
                       <li style="margin-bottom: 10px;">
                         <label>Deskripsi</label>
                         <div class="input-box">
-                          <textarea name="description" style="width: 90%;" rows="15" placeholder="Masukkan deskripsi mengenai barang disini"><?php echo $auction_detail->description ?></textarea>
+                          <textarea name="description" style="width: 90%;" rows="15" placeholder="Masukkan deskripsi mengenai barang disini"><?php echo ($auction_detail->description); ?></textarea>
                         </div>
                       </li>
                     </ul>

@@ -27,6 +27,7 @@ class Notifications_model extends CI_Model {
 		$this->db->select('*');
 		$this->db->from('members_notifications');
 		$this->db->where('id_receiver', $id_member);
+		$this->db->where('is_read', false);
 
 		$query = $this->db->get();
 		return $query->num_rows();
@@ -46,6 +47,13 @@ class Notifications_model extends CI_Model {
 	public function delete($where)
 	{
 		$this->db->where('id_receiver', $where);
+		$this->db->delete('members_notifications');
+	}
+
+	public function delete_per_member($where)
+	{
+		$this->db->where('id_receiver', $where);
+		$this->db->or_where('id_giver', $where);
 		$this->db->delete('members_notifications');
 	}
 

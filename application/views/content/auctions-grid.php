@@ -4,8 +4,8 @@
       <div class="row">
         <div class="col-xs-12">
           <ul>
-            <li class="home"> <a href="index-2.html" title="Go to Home Page">Home</a> <span>/</span> </li>
-            <li class="category1599"> <a href="grid.html" title="">Auctions</a> <span>/ </span> </li>
+            <li class="home"> <a href="<?php echo base_url() ?>" title="Go to Home Page">Home</a> <span>/</span> </li>
+            <li class="category1599"> <a href="#" title="">Auctions</a> <span>/ </span> </li>
           </ul>
         </div>
       </div>
@@ -24,13 +24,17 @@
             <div class="category-products">
               <ul class="products-grid">
               <?php foreach ($products as $auc): ?>
-                <li class="item col-lg-4 col-md-4 col-sm-4 col-xs-6">
+                <li class="item col-lg-4 col-md-4 col-sm-4 col-xs-6 <?php echo ($auc->is_clossed == 1) ? 'sold-out': '' ;?>">
                     <div class="item-inner">
                       <div class="item-img">
                         <div class="item-img-info product-img-div">
                           <a href="<?php echo base_url().'auctions/detail/'.$auc->id_auction.'/'.$auc->id_product ?>" class="product-image">
                             <?php $thumbnail = $this->products_picts_model->get_product_thumbnail($auc->id_product); ?>
-                            <img src="<?php echo base_url().'assets/img/posts/'.$thumbnail->img_file ?>" alt="<?php echo $auc->name; ?>">
+                            <?php if ($thumbnail): ?>
+                              <img src="<?php echo base_url().'assets/img/posts/'.$thumbnail->img_file ?>" alt="<?php echo $auc->name; ?>">
+                            <?php else: ?>
+                              <img src="<?php echo base_url().'assets/img/noimage.png'?>">
+                            <?php endif ?>
                           </a>
                         </div>
                       </div>
@@ -91,7 +95,11 @@
               </div>
             <?php else: ?>
               <div class="col-md-12">
-                <div class="alert alert-warning">Tidak ada barang pada kategori ini.</div>
+                <?php if ($this->session->userdata('refine')): ?>
+                  <div class="alert alert-warning">Hasil pencarian tidak ada yang cocok.</div>
+                <?php else: ?>
+                  <div class="alert alert-warning">Tidak ada barang pada kategori ini.</div>
+                <?php endif ?>
               </div>
             <?php endif ?>
           </article>

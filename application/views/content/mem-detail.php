@@ -35,7 +35,7 @@
                     <?php echo ($mem_detail->address) ? $mem_detail->address : '-';?><br>
                     <?php echo ($mem_detail->city) ? $mem_detail->city.', '.$mem_detail->province : '';?><br>
                     <?php echo $mem_detail->postal_code; ?><br>
-                    <a href="../../edit_profile/<?php echo $mem_detail->id_member.'/'.$mem_detail->username;?>">Edit Address</a>
+                    <a href="../edit_profile/<?php echo $mem_detail->id_member.'/'.$mem_detail->username;?>">Edit Address</a>
                     </address>
                 </div>
               </div>

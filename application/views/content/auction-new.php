@@ -66,7 +66,7 @@
                       <li style="margin-bottom: 10px;">
                         <label>Nama barang</label>
                         <div class="input-box">
-                          <input placeholder="Nama produk atau barang untuk iklan" value="" name="name" class="input-text validate-postcode" type="text" required>
+                          <input placeholder="Nama produk atau barang untuk lapak" value="" name="name" class="input-text" type="text" required>
                         </div>
                       </li>
                       <li style="margin-bottom: 10px;">
@@ -90,7 +90,7 @@
                       <li style="margin-bottom: 10px;">
                         <label>Deskripsi</label>
                         <div class="input-box">
-                          <textarea name="description" style="width: 90%;" rows="15" placeholder="Masukkan deskripsi mengenai barang disini"></textarea>
+                          <textarea required="" name="description" style="width: 90%;" rows="15" placeholder="Masukkan deskripsi mengenai barang disini"></textarea>
                         </div>
                       </li>
                     </ul>
@@ -136,3 +136,7 @@
   </div>
   </div>
   </div>
+
+  <script type="text/javascript">
+    
+  </script>

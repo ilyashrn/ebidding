@@ -40,7 +40,8 @@
 
 $route['default_controller'] = "main";
 $route['404_override'] = '';
-$route['admin'] = 'admin/dashboard';
+$route['admin'] = 'admin/main';
+$route['admin/login'] = 'admin/main/login';
 
 $route['notifications/mark_all_read'] = "notifications/mark_all_read";
 $route['notifications/delete_all'] = "notifications/delete_all";

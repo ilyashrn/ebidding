@@ -46,7 +46,7 @@ var Datatable = function() {
                     "language": { // language settings
                         // metronic spesific
                         "metronicGroupActions": "_TOTAL_ records selected:  ",
-                        "metronicAjaxRequestGeneralError": "Could not complete request. Please check your internet connection",
+                        // "metronicAjaxRequestGeneralError": "Could not complete request. Please check your internet connection",
 
                         // data tables spesific
                         "lengthMenu": "<span class='seperator'>|</span>View _MENU_ records",
@@ -126,13 +126,13 @@ var Datatable = function() {
                                 tableOptions.onError.call(undefined, the);
                             }
 
-                            App.alert({
-                                type: 'danger',
-                                icon: 'warning',
-                                message: tableOptions.dataTable.language.metronicAjaxRequestGeneralError,
-                                container: tableWrapper,
-                                place: 'prepend'
-                            });
+                            // App.alert({
+                            //     type: 'danger',
+                            //     icon: 'warning',
+                            //     message: tableOptions.dataTable.language.metronicAjaxRequestGeneralError,
+                            //     container: tableWrapper,
+                            //     place: 'prepend'
+                            // });
 
                             App.unblockUI(tableContainer);
                         }

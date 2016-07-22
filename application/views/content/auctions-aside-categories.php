@@ -26,47 +26,37 @@
             </div>
             
             <div class="block block-layered-nav">
-              <div class="block-title">Shop By</div>
+              <?php 
+              $attr = array('class' => 'filter-form');
+              echo form_open('auctions/search',$attr); ?>
+              <div class="block-title">Filter</div>
               <div class="block-content">
-                <p class="block-subtitle">Shopping Options</p>
+                <p class="block-subtitle"></p>
                 <dl id="narrow-by-list">
-                  <dt class="odd">Price</dt>
+                  <dt class="odd">Kata kunci</dt>
                   <dd class="odd">
-                    <ol>
-                      <li> <a href="#"><span class="price">$0.00</span> - <span class="price">$99.99</span></a> (6) </li>
-                      <li> <a href="#"><span class="price">$100.00</span> and above</a> (6) </li>
-                    </ol>
+                    <input type="text" class="input-text" name="search" placeholder="Kata kunci" value="<?php echo $this->session->userdata('keyword'); ?>"> 
                   </dd>
-                  <dt class="even">Manufacturer</dt>
+                  <dt class="odd">Range harga</dt>
+                  <dd class="odd">
+                    <input type="number" class="input-text" name="price_from" placeholder="From (Rp)" value="<?php echo $this->session->userdata('price_from'); ?>"> 
+                    <input type="number" class="input-text" name="price_to" placeholder="To (Rp)" value="<?php echo $this->session->userdata('price_to'); ?>">
+                  </dd>
+                  <dt class="even">Kondisi</dt>
                   <dd class="even">
-                    <ol>
-                      <li> <a href="#">TheBrand</a> (9) </li>
-                      <li> <a href="#">Company</a> (4) </li>
-                      <li> <a href="#">LogoFashion</a> (1) </li>
-                    </ol>
+                    <input type="checkbox" name="Baru" value="1" <?php echo ($this->session->userdata('Baru')) ? 'checked': '' ;?>> Baru
+                    <input type="checkbox" name="Bekas" value="1" <?php echo ($this->session->userdata('Bekas')) ? 'checked': '' ;?>> Bekas
                   </dd>
-                  <dt class="odd">Color</dt>
+                  <dt class="odd">Status</dt>
                   <dd class="odd">
-                    <ol>
-                      <li> <a href="#">Green</a> (1) </li>
-                      <li> <a href="#">White</a> (5) </li>
-                      <li> <a href="#">Black</a> (5) </li>
-                      <li> <a href="#">Gray</a> (4) </li>
-                      <li> <a href="#">Dark Gray</a> (3) </li>
-                      <li> <a href="#">Blue</a> (1) </li>
-                    </ol>
+                    <input type="checkbox" name="not_closed" value="1" <?php echo ($this->session->userdata('not_closed')) ? 'checked': '' ;?>> Dijual
+                    <input type="checkbox" name="closed" value="1" <?php echo ($this->session->userdata('closed') == 1) ? 'checked': '' ;?>> Sudah laku/ditutup
                   </dd>
-                  <dt class="last even">Size</dt>
-                  <dd class="last even">
-                    <ol>
-                      <li> <a href="#">S</a> (6) </li>
-                      <li> <a href="#">M</a> (6) </li>
-                      <li> <a href="#">L</a> (4) </li>
-                      <li> <a href="#">XL</a> (4) </li>
-                    </ol>
-                  </dd>
+                  <input type="hidden" name="refine" value="1">
                 </dl>
+                <button class="button coupon" type="submit">Filter</button>
               </div>
+              <?php echo form_close(); ?>
             </div>
             <div class="custom-slider">
               <div>
@@ -77,24 +67,25 @@
                     <li data-target="#carousel-example-generic" data-slide-to="2" class=""></li>
                   </ol>
                   <div class="carousel-inner">
-                    <div class="item active"><img src="<?php echo base_url().'assets/aspire/';?>images/slide3.jpg" alt="slide3">
+                    <div class="item active"><img src="<?php echo base_url().'assets/aspire/';?>images/adv2.jpg" alt="slide3">
                       <div class="carousel-caption">
-                        <h3><a title=" Sample Product" href="#">50% OFF</a></h3>
+                        <h3><a title=" Sample Product" href="#">Adv Sample</a></h3>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        <a class="link" href="#">Buy Now</a></div>
+                        <!-- <a class="link" href="#">Buy Now</a> -->
+                        </div>
                     </div>
-                    <div class="item"><img src="<?php echo base_url().'assets/aspire/';?>images/slide1.jpg" alt="slide1">
+                    <div class="item"><img src="<?php echo base_url().'assets/aspire/';?>images/adv2.jpg" alt="slide1">
                       <div class="carousel-caption">
-                        <h3><a title=" Sample Product" href="#">Hot collection</a></h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <h3><a title=" Sample Product" href="#">Adv sample 2</a></h3>
+                        <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p> -->
                       </div>
                     </div>
-                    <div class="item"><img src="<?php echo base_url().'assets/aspire/';?>images/slide2.jpg" alt="slide2">
+                    <!-- <div class="item"><img src="<?php echo base_url().'assets/aspire/';?>images/slide2.jpg" alt="slide2">
                       <div class="carousel-caption">
                         <h3><a title=" Sample Product" href="#">Summer collection</a></h3>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                   <a class="left carousel-control" href="#" data-slide="prev"> <span class="sr-only">Previous</span> </a> <a class="right carousel-control" href="#" data-slide="next"> <span class="sr-only">Next</span> </a></div>
               </div>

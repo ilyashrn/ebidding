@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- Mirrored from htmldemo.magikcommerce.com/ecommerce/aspire-html-template/home2/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 Apr 2016 05:34:56 GMT -->
-<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 <head>
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <!--[if IE]>
@@ -22,7 +21,8 @@
 
 <!-- CSS Style -->
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'assets/aspire/'?>css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="<?php echo base_url().'assets/aspire/'?>css/bootstrap-toggle.min.css"><link rel="stylesheet" type="text/css" href="<?php echo base_url().'assets/aspire/'?>css/font-awesome.min.css" media="all">
+<link rel="stylesheet" type="text/css" href="<?php echo base_url().'assets/aspire/'?>css/bootstrap-toggle.min.css">
+<link rel="stylesheet" type="text/css" href="<?php echo base_url().'assets/aspire/'?>css/font-awesome.min.css" media="all">
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'assets/aspire/'?>css/simple-line-icons.css" media="all">
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'assets/aspire/'?>css/owl.carousel.css">
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'assets/aspire/'?>css/owl.theme.css">

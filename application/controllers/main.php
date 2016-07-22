@@ -34,7 +34,6 @@ class Main extends CI_Controller {
 			$this->load->view('content/login', $data);
 			$this->load->view('footer', $data);	
 		}
-		
 	}
 
 	public function login_process()

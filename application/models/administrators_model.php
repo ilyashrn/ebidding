@@ -19,9 +19,23 @@ class Administrators_model extends CI_Model {
 			
 			$this->db->where('username', $user_id);
 			$this->db->or_where('email', $user_id);
-			$this->db->update('members',$update_time);
+			$this->db->update('administrators',$update_time);
 
 			return $query->row();
+		} else {
+			return false;
+		}
+	}
+
+	public function check_entry($where_what,$where)
+	{
+		$this->db->select('*');
+		$this->db->from('administrators');
+		$this->db->where($where_what, $where);
+
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return true;
 		} else {
 			return false;
 		}
@@ -60,10 +74,15 @@ class Administrators_model extends CI_Model {
 		$this->db->delete('administrators');
 	}
 
-	public function update($where,$data)
+	public function update($data,$where)
 	{
 		$this->db->where('id_administrator', $where);
 		$this->db->update('administrators', $data);
+	}
+
+	public function insert($data)
+	{
+		$this->db->insert('administrators', $data);
 	}
 
 }

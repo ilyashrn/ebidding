@@ -22,6 +22,16 @@ class Products_picts_model extends CI_Model {
 		}
 	}
 
+	public function get_per_product_rows($id)
+	{
+		$this->db->select('*');
+		$this->db->from('products_picts');
+		$this->db->where('id_product', $id);
+
+		$query = $this->db->get();
+		return $query->num_rows();
+	}
+
 	public function get_product_thumbnail($id)
 	{
 		$this->db->select('*');

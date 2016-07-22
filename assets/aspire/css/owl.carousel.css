@@ -51,9 +51,9 @@
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 /* mouse grab icon */
-.grabbing {
+/*.grabbing {
 	cursor: url(grabbing.html) 8 8, move;
-}
+}*/
 /* fix */
 .owl-carousel .owl-wrapper, .owl-carousel .owl-item {
 	-webkit-backface-visibility: hidden;
