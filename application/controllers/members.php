@@ -15,7 +15,7 @@ class Members extends CI_Controller {
 	{
 		$this->form_validation->set_rules('username', 'Username', 'required|callback_is_username_exist');
 		$this->form_validation->set_rules('email', 'E-mail', 'required|callback_is_email_exist');
-		$this->form_validation->set_rules('conf_password', 'password confirmation', 'required');
+		$this->form_validation->set_rules('conf_password', 'password confirmation', '	required');
 		$this->form_validation->set_rules('password', 'password', 'matches[conf_password]');
 		
 		if ($this->form_validation->run()) {

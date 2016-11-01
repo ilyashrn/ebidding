@@ -11,7 +11,7 @@ class Main extends CI_Controller {
 		$this->header_categories = $this->categories_model->get_all_categories();
 	}
 
-	public function index()
+	public function index() //halaman home
 	{
 		$data = array(
 			'title' => '',
@@ -23,7 +23,7 @@ class Main extends CI_Controller {
 		$this->load->view('slider-script');
 	}
 
-	public function login()
+	public function login() //halaman login
 	{
 		if ($this->session->userdata('username')) { //LOGIN-ED
 			redirect('main','refresh');
@@ -50,6 +50,7 @@ class Main extends CI_Controller {
 				'email' => $login_check->email,
 				'fullname' => $login_check->fullname
 			);
+			$this->session->set_flashdata('msg', true);
 			$this->session->set_userdata($sess_array);
 			redirect('main','refresh');
 		} else {

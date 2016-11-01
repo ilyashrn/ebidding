@@ -89,8 +89,18 @@ $(document).ready(function() {
                       <?php else: ?>
                         <div class="add-to-box">
                           <div class="add-to-cart">
-                            <button type="button" data-toggle="collapse" data-target="#kontak" class="button btn-cart" type="button">Kontak penjual</button>
-                            <button data-toggle="modal" data-target="#myModal-5" class="button btn-cart" type="button">Review untuk penjual</button>
+                            <?php if (!$auction_detail->is_clossed): ?>
+                              <button type="button" data-toggle="collapse" data-target="#kontak" class="button btn-cart" type="button">Kontak penjual</button>
+                            <?php endif ?>  
+                            <?php if (
+                            !$this->reviews_model->check_entry(
+                                $auction_detail->id_auction,
+                                $this->session->userdata('id'),
+                                $auction_detail->id_auctioneer
+                                )
+                              ): ?>
+                              <button data-toggle="modal" data-target="#myModal-5" class="button btn-cart" type="button">Review untuk penjual</button>
+                            <?php endif ?>
                           </div>
                         </div>
                         <div class="collapse" id="kontak" style="width: 70%;">
